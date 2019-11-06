@@ -1,0 +1,25 @@
+BasedOnStyle:  Chromium
+Standard:        Cpp11
+IndentWidth:     4
+AccessModifierOffset: -4
+ 
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterControlStatement: true
+  AfterStruct: true
+  AfterEnum: true
+  AfterClass: true
+  AfterFunction: true
+  AfterNamespace: false
+  BeforeElse: true
+ 
+ColumnLimit: 160
+MaxEmptyLinesToKeep: 2
+BreakConstructorInitializersBeforeComma: true
+ConstructorInitializerAllOnOneLineOrOnePerLine: false
+AlignAfterOpenBracket: AlwaysBreak
+Cpp11BracedListStyle: false
+BreakBeforeBinaryOperators: NonAssignment
+AllowShortFunctionsOnASingleLine: false
+SortIncludes: false
+ReflowComments: false
