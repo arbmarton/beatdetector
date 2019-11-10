@@ -11,7 +11,11 @@ class SpectrogramBar
 public:
 	SpectrogramBar() = delete;
 	SpectrogramBar(const float xPos, const float yPos, const float widthArg, const float heightArg);
-	~SpectrogramBar() = default;
+	SpectrogramBar(const SpectrogramBar& rhs) = delete;
+	SpectrogramBar(SpectrogramBar&& rhs) noexcept;
+	SpectrogramBar& operator=(const SpectrogramBar& rhs) = delete;
+	SpectrogramBar& operator=(SpectrogramBar&& rhs) noexcept;
+	~SpectrogramBar();
 
 	void draw() const;
 

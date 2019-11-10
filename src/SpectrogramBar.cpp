@@ -3,16 +3,6 @@
 #include "Shader.h"
 #include "Utilities.h"
 
-namespace
-{
-	constexpr float verticesTemplate[] = {
-		 0.5f,  0.5f, 0.0f,  // top right
-		 0.5f, -0.5f, 0.0f,  // bottom right
-		-0.5f, -0.5f, 0.0f,  // bottom left
-		-0.5f,  0.5f, 0.0f   // top left 
-	};
-}
-
 Shader* SpectrogramBar::shader = nullptr;
 
 SpectrogramBar::SpectrogramBar(const float xPos, const float yPos, const float widthArg, const float heightArg)
@@ -25,9 +15,9 @@ SpectrogramBar::SpectrogramBar(const float xPos, const float yPos, const float w
 	{
 		shader = new Shader(getShaderPath("bar.vs"), getShaderPath("bar.fs"));
 	}
-		
-	const float xNDC = xPos * 2 - 1;
-	const float yNDC = yPos * 2 - 1;
+
+	const float xNDC = xCoordBottomLeft * 2 - 1;
+	const float yNDC = yCoordBottomLeft * 2 - 1;
 	const float widthNDC = width * 2;
 	const float heightNDC = height * 2;
 
@@ -52,9 +42,53 @@ SpectrogramBar::SpectrogramBar(const float xPos, const float yPos, const float w
 	glEnableVertexAttribArray(0);
 }
 
+SpectrogramBar::SpectrogramBar(SpectrogramBar&& rhs) noexcept
+	: xCoordBottomLeft(rhs.xCoordBottomLeft)
+	, yCoordBottomLeft(rhs.yCoordBottomLeft)
+	, width(rhs.width)
+	, height(rhs.height)
+	, VAO(rhs.VAO)
+	, VBO(rhs.VBO)
+	, EBO(rhs.EBO)
+	, vertices(rhs.vertices)
+{
+	rhs.VAO = 0;
+	rhs.VBO = 0;
+	rhs.EBO = 0;
+}
+
+SpectrogramBar& SpectrogramBar::operator=(SpectrogramBar&& rhs) noexcept
+{
+	xCoordBottomLeft = rhs.xCoordBottomLeft;
+	yCoordBottomLeft = rhs.yCoordBottomLeft;
+	width = rhs.width;
+	height = rhs.height;
+
+	VAO = rhs.VAO;
+	VBO = rhs.VBO;
+	EBO = rhs.EBO;
+
+	rhs.VAO = 0;
+	rhs.VBO = 0;
+	rhs.EBO = 0;
+
+	vertices = rhs.vertices;
+
+	return *this;
+}
+
+SpectrogramBar::~SpectrogramBar()
+{
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
+}
+
 void SpectrogramBar::draw() const
 {
 	glUseProgram(shader->getID());
+
+	shader->setBool("isRed", height > 0.5f);
 
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, GLsizei(vertices.size()), GL_UNSIGNED_INT, 0);
