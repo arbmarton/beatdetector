@@ -20,12 +20,14 @@ set(FRAGMENT_SHADERS
 )
 
 set(HEADER_FILES
+	include/KeyPressWatcher.h
 	include/Shader.h
 	include/SpectrogramBar.h
 	include/Utilities.h
 )
 
 set(SOURCE_FILES
+	src/KeyPressWatcher.cpp
 	src/main.cpp
 	src/Shader.cpp
 	src/SpectrogramBar.cpp
